@@ -50,7 +50,7 @@ resource "aws_security_group" "allow_ssh" {
   
 }
 
-resource "aws_key_pair" "" {
+resource "aws_key_pair" "deployer" {
     key_name = "deployer-key"
     public_key = file(var.ssh_key_path)      
 }
