@@ -8,7 +8,7 @@ provider "aws" {
     region = var.region_id    
 }
 
-data "aws" "ubuntu" {
+data "aws_ami" "ubuntu" {
     most_recent = true
 
     filter {
