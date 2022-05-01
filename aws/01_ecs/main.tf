@@ -50,10 +50,26 @@ resource "aws_security_group" "allow_ssh" {
   
 }
 
-output "name" {
-    value = data.aws_ami.ubuntu.name
+resource "aws_key_pair" "" {
+    key_name = "deployer-key"
+    public_key = file(var.ssh_key_path)      
 }
-  
-output "id" {
-    value = data.aws_ami.ubuntu.id
+
+resource "aws_instance" "web" {
+    ami = data.aws_ami.ubuntu.id
+    instance_type = "t2.micro"
+    key_name = aws_key_pair.deployer.key_name  
+    vpc_security_group_ids = [aws_security_group.allow_ssh.id]
+    tags = {
+        Name = "helloWorld"
+    }
+}
+
+
+output "ip_instance" {
+    value = aws_instance.web.public_ip
+}
+
+output "ssh" {
+    value = "ssh -l ubuntu ${aws_instance.web.public_ip}"
 }
